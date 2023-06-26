@@ -3,16 +3,18 @@ provider "azurerm" {
   subscription_id = "${var.subscription_id}"
   client_id       = "${var.client_id}"
   client_secret   = "${var.client_secret}"
+  skip_provider_registration = "true"
   features {}
 }
 terraform {
   backend "azurerm" {
-    storage_account_name = ""
-    container_name       = ""
-    key                  = ""
-    access_key           = ""
+    storage_account_name = "udacity3sta"
+    container_name       = "tfstate"
+    key                  = "test.terraform.tfstate"
+    access_key           = "wckZ1mTjf5yOd+iXCBMA+lVJonvR1BOEm2UpawJ7hv73+sROs4YMWBhdRQtRyX258+6Yp0ce4xui+AStz7YGjQ=="
   }
 }
+
 module "resource_group" {
   source               = "../../modules/resource_group"
   resource_group       = "${var.resource_group}"
@@ -51,4 +53,12 @@ module "publicip" {
   application_type = "${var.application_type}"
   resource_type    = "publicip"
   resource_group   = "${module.resource_group.resource_group_name}"
+}
+module "vm" {
+  source          = "../../modules/vm"
+  location        = var.location
+  subnet_id       = module.network.subnet_id_test
+  resource_group  = module.resource_group.resource_group_name
+  public_ip_address_id = module.publicip.public_ip_address_id
+  admin_username  = var.admin_username 
 }
