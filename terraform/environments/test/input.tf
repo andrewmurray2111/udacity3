@@ -15,3 +15,7 @@ variable address_prefix_test {}
 variable address_space {}
 variable admin_username {}
 
+# VM Image
+variable "shared_image_name" {}
+variable "shared_image_gallery" {}
+variable "shared_image_resource_group" {}

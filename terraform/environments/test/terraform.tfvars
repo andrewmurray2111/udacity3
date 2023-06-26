@@ -14,3 +14,8 @@ virtual_network_name = "udacity3-vn"
 address_space = ["10.5.0.0/16"]
 address_prefix_test = "10.5.1.0/24"
 admin_username = "adminuser"
+
+# VM Image
+shared_image_name = "linux20_04-lts-gen2"
+shared_image_gallery = "linuxtestgallery"
+shared_image_resource_group = "linux-test_group"

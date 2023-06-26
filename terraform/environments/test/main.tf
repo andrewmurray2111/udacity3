@@ -55,10 +55,13 @@ module "publicip" {
   resource_group   = "${module.resource_group.resource_group_name}"
 }
 module "vm" {
-  source          = "../../modules/vm"
-  location        = var.location
-  subnet_id       = module.network.subnet_id_test
-  resource_group  = module.resource_group.resource_group_name
-  public_ip_address_id = module.publicip.public_ip_address_id
-  admin_username  = var.admin_username 
+  source                      = "../../modules/vm"
+  location                    = var.location
+  subnet_id                   = module.network.subnet_id_test
+  resource_group              = module.resource_group.resource_group_name
+  public_ip_address_id        = module.publicip.public_ip_address_id
+  admin_username              = var.admin_username
+  shared_image_name           = var.shared_image_name
+  shared_image_gallery        = var.shared_image_gallery
+  shared_image_resource_group = var.shared_image_resource_group
 }

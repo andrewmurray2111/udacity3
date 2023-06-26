@@ -11,6 +11,12 @@ resource "azurerm_network_interface" "test" {
   }
 }
 
+data "azurerm_shared_image" "test" {
+  name                = var.shared_image_name
+  gallery_name        = var.shared_image_gallery
+  resource_group_name = var.shared_image_resource_group
+}
+
 resource "azurerm_linux_virtual_machine" "test" {
   name                  = "TEST"
   location              = var.location
@@ -27,10 +33,8 @@ resource "azurerm_linux_virtual_machine" "test" {
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
-    version   = "latest"
+  
+  storage_image_reference {
+    id = data.azurerm_shared_image.test.id
   }
 }
