@@ -28,23 +28,27 @@ def login(user, password):
     return driver
 
 def add_cart(driver, count):
-    for i in range(count):
+    i = 1
+    while i < count:
         element = "a[id='item_" + str(i) + "_title_link']"
         driver.find_element(By.CSS_SELECTOR, element).click()
         driver.find_element(By.CSS_SELECTOR, "button.btn_primary.btn_small.btn_inventory").click()
         product = driver.find_element(By.CSS_SELECTOR, "div[class='inventory_details_name']").text
         print(timestamp() + product + " added to cart")
         driver.find_element(By.CSS_SELECTOR, "button.inventory_details_back_button").click()
+        i += 1
     print(timestamp() + 'All {:d} items added to shopping cart'.format(count))
 
 def remove_cart(driver, count):
-    for i in range(count):
+    i = 1
+    while i < count:
         element = "a[id='item_" + str(i) + "_title_link']"
         driver.find_element(By.CSS_SELECTOR, element).click()
         driver.find_element(By.CSS_SELECTOR, "button.btn_secondary.btn_small.btn_inventory").click()
         product = driver.find_element(By.CSS_SELECTOR, "div[class='inventory_details_name']").text
         print(timestamp() + product + " removed from cart")
         driver.find_element(By.CSS_SELECTOR, "button.inventory_details_back_button").click()
+        i += 1
     print(timestamp() + 'All {:d} items are removed from shopping cart'.format(count))
 
 
