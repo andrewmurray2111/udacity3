@@ -157,7 +157,7 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          sudo pip3 install -U selenium webdriver-manager
+          sudo pip3 install -U selenium
           sudo pip3 install -U requests
           sudo apt-get install -y chromium-browser
           
