@@ -28,7 +28,7 @@ def login(user, password):
     return driver
 
 def add_cart(driver, count):
-    for i in count:
+    for i in range(count):
         element = "a[id='item_" + str(i) + "_title_link']"
         driver.find_element(By.CSS_SELECTOR, element).click()
         driver.find_element(By.CSS_SELECTOR, "button.btn_primary.btn_small.btn_inventory").click()
@@ -50,7 +50,7 @@ def remove_cart(driver, count):
 
 if __name__ == "__main__":
     driver = login("standard_user", "secret_sauce")
-    items = driver.find_elements(By.CSS_SELECTOR, "inventory_item_name")
+    items = driver.find_elements(By.CLASS_NAME, "inventory_item_name")
     count = items.count
     add_cart(driver, count)
     remove_cart(driver, count)
