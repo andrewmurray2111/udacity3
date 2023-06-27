@@ -108,6 +108,7 @@ stages:
   - job:
     steps:
       - task: Bash@3
+        displayName: Install dependencies
         inputs:
           targetType: 'inline'
           script: |
@@ -148,6 +149,9 @@ stages:
 
   - job: Selenium
     steps:
+    - download: current
+      displayName: 'Download Selenium Tests'
+      artifact: selenium-tests
     - task: Bash@3
       displayName: 'Running Selenium Test'
       inputs:
@@ -165,6 +169,18 @@ stages:
           chromedriver --version
 
           echo 'Selenium installed' 
+
+          unzip -o $(Pipeline.Workspace)/selenium/selenium-tests.zip -d .
+          sudo mkdir -p /var/log/selenium
+          sudo chmod 666 /var/log/selenium
+
+          sudo python3 -u uitests.py 2>&1 | sudo tee -a /var/log/selenium/selenium-test.log
+      - task: PublishPipelineArtifact@1
+        displayName: Publish Selenium logs
+        inputs:
+          targetPath: '/var/log/selenium/selenium-test.log'
+          artifactName: 'selenium-logs-artifact'
+
 
   - job: JMeter
     steps:
