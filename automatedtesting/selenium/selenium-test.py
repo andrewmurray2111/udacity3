@@ -19,8 +19,8 @@ def login(user, password):
     driver = webdriver.Chrome(options=options)
     print(timestamp() + 'Browser started successfully')
     driver.get('https://www.saucedemo.com/')
-    driver.find_element(By.CSS_SELECTOR, "input[id='user-name']").send_keys(user)
-    driver.find_element(By.CSS_SELECTOR, "input[id='password']").send_keys(password)
+    driver.find_element(By.ID, "user-name").send_keys(user)
+    driver.find_element(By.ID, "password").send_keys(password)
     driver.find_element(By.ID, "login-button").click()
     product_label = driver.find_element(By.CLASS_NAME, "title").text
     assert "Products" in product_label
@@ -30,10 +30,10 @@ def login(user, password):
 def add_cart(driver, count):
     i = 1
     while i < count:
-        element = "a[id='item_" + str(i) + "_title_link']"
-        driver.find_element(By.CSS_SELECTOR, element).click()
+        element = "item_" + str(i) + "_title_link"
+        driver.find_element(By.ID, element).click()
         driver.find_element(By.CSS_SELECTOR, "button.btn_primary.btn_small.btn_inventory").click()
-        product = driver.find_element(By.CSS_SELECTOR, "div[class='inventory_details_name']").text
+        product = driver.find_element(By.CLASS_NAME, "inventory_details_name").text
         print(timestamp() + product + " added to cart")
         driver.find_element(By.CSS_SELECTOR, "button.inventory_details_back_button").click()
         i += 1
@@ -42,10 +42,10 @@ def add_cart(driver, count):
 def remove_cart(driver, count):
     i = 1
     while i < count:
-        element = "a[id='item_" + str(i) + "_title_link']"
-        driver.find_element(By.CSS_SELECTOR, element).click()
+        element = "item_" + str(i) + "_title_link"
+        driver.find_element(By.ID, element).click()
         driver.find_element(By.CSS_SELECTOR, "button.btn_secondary.btn_small.btn_inventory").click()
-        product = driver.find_element(By.CSS_SELECTOR, "div[class='inventory_details_name']").text
+        product = driver.find_element(By.CLASS_NAME, "inventory_details_name").text
         print(timestamp() + product + " removed from cart")
         driver.find_element(By.CSS_SELECTOR, "button.inventory_details_back_button").click()
         i += 1
