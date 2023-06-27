@@ -105,7 +105,7 @@ stages:
 
 - stage: Dependencies
   jobs:
-  - job: Install Dependencies
+  - job: InstallDependencies
     steps:
       - task: Bash@3
         displayName: Install dependencies
