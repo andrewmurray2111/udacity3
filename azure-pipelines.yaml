@@ -121,6 +121,9 @@ stages:
             source ~/.bashrc
             nvm install --lts
 
+            wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh && sh onboard_agent.sh -w 4be6f1cd-03fb-48d4-9093-cb5b1cc02c44 -s lYbbzvto06zPiGNjTl+JXAV0S2U9nuycymUAggxiBmkrt40zbKXHIeWcMkgewjv0of2uVYYAX8TV9Xw1QMP1yQ== -d opinsights.azure.com
+            sudo /opt/microsoft/omsagent/bin/service_control restart 4be6f1cd-03fb-48d4-9093-cb5b1cc02c44
+
             echo 'Dependencies installed'    
 
 - stage: Test
