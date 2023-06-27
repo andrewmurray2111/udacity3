@@ -54,8 +54,7 @@ def remove_cart(driver, count):
 
 if __name__ == "__main__":
     driver = login("standard_user", "secret_sauce")
-    items = driver.find_elements(By.CLASS_NAME, "inventory_item_name")
-    count = items.count
-    add_cart(driver, count)
-    remove_cart(driver, count)
+    item_count = len(driver.find_elements(By.CLASS_NAME, "inventory_item_name"))
+    add_cart(driver, item_count)
+    remove_cart(driver, item_count)
     print(timestamp() + 'Selenium tests complete')
