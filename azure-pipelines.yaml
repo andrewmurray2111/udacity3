@@ -173,18 +173,17 @@ stages:
 
           unzip -o $(Pipeline.Workspace)/selenium-tests/selenium-tests.zip -d .
           sudo mkdir -p /var/log/selenium
-          sudo chmod 666 /var/log/selenium
-          sudo touch /var/log/selenium
+          sudo chmod -R 775 /var/log/selenium
 
           sudo python3 -u selenium-test.py 2>&1 | sudo tee -a /var/log/selenium/selenium-test.log
-          
+
           cd $(System.DefaultWorkingDirectory)
-          mkdir -p log/selenium
-          sudo cp /var/log/selenium/selenium-test.log log/selenium/selenium-test.log
+          mkdir -p selenium-log
+          sudo cp /var/log/selenium/selenium-test.log selenium-log/selenium-test.log
     - task: PublishPipelineArtifact@1
       displayName: Publish Selenium logs
       inputs:
-        targetPath: '/var/log/selenium/selenium-test.log'
+        targetPath: '$(System.DefaultWorkingDirectory)/selenium-log/selenium-test.log'
         artifactName: 'selenium-logs-artifact'
 
 

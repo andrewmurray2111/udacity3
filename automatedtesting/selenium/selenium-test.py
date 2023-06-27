@@ -28,7 +28,7 @@ def login(user, password):
     return driver
 
 def add_cart(driver, count):
-    i = 1
+    i = 0
     while i < count+1:
         element = "item_" + str(i) + "_title_link"
         driver.find_element(By.ID, element).click()
@@ -40,7 +40,7 @@ def add_cart(driver, count):
     print(timestamp() + 'All {:d} items added to shopping cart'.format(count))
 
 def remove_cart(driver, count):
-    i = 1
+    i = 0
     while i < count+1:
         element = "item_" + str(i) + "_title_link"
         driver.find_element(By.ID, element).click()
