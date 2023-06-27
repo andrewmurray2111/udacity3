@@ -29,7 +29,7 @@ def login(user, password):
 
 def add_cart(driver, count):
     i = 1
-    while i < count:
+    while i < count+1:
         element = "item_" + str(i) + "_title_link"
         driver.find_element(By.ID, element).click()
         driver.find_element(By.CSS_SELECTOR, "button.btn_primary.btn_small.btn_inventory").click()
@@ -41,7 +41,7 @@ def add_cart(driver, count):
 
 def remove_cart(driver, count):
     i = 1
-    while i < count:
+    while i < count+1:
         element = "item_" + str(i) + "_title_link"
         driver.find_element(By.ID, element).click()
         driver.find_element(By.CSS_SELECTOR, "button.btn_secondary.btn_small.btn_inventory").click()
