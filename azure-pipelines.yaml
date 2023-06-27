@@ -174,7 +174,7 @@ stages:
           sudo mkdir -p /var/log/selenium
           sudo chmod 666 /var/log/selenium
 
-          sudo python3 -u uitests.py 2>&1 | sudo tee -a /var/log/selenium/selenium-test.log
+          sudo python3 -u selenium-test.py 2>&1 | sudo tee -a /var/log/selenium-tests/selenium-test.log
     - task: PublishPipelineArtifact@1
       displayName: Publish Selenium logs
       inputs:
