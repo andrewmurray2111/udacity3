@@ -1,6 +1,7 @@
 # #!/usr/bin/env python
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
+from webdriver_manager.chrome import ChromeDriverManager
 import datetime
 
 
@@ -13,10 +14,8 @@ def login(user, password):
     options = ChromeOptions()
     options.add_argument('--no-sandbox')
     options.add_argument("--headless")
-    options.add_argument("--disable-infobars")
-    options.add_argument("--disable-extensions")
     options.add_argument("--disable-dev-shm-usage")
-    driver = webdriver.Chrome(options=options)
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     print(timestamp() + 'Browser started successfully')
     driver.get('https://www.saucedemo.com/')
     driver.find_element_by_css_selector("input[id='user-name']").send_keys(user)
