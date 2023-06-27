@@ -170,7 +170,7 @@ stages:
 
           echo 'Selenium installed' 
 
-          unzip -o $(Pipeline.Workspace)/selenium/selenium-tests.zip -d .
+          unzip -o $(Pipeline.Workspace)/selenium-tests/selenium-tests.zip -d .
           sudo mkdir -p /var/log/selenium
           sudo chmod 666 /var/log/selenium
 
