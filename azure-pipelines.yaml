@@ -70,18 +70,19 @@ stages:
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip'
     - publish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip'
-      displayName: 'Upload fakerrestapi Package'
+      displayName: 'Upload Fakerrestapi package'
       artifact: drop-fakerestapi
+
     - task: ArchiveFiles@2
-      displayName: 'Archive Automation Tests'
+      displayName: "Archive Selenium Tests"
       inputs:
-        rootFolderOrFile: 'automatedtesting' 
+        rootFolderOrFile: "$(System.DefaultWorkingDirectory)/automatedtesting/selenium"
         includeRootFolder: false
-        archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-automatedtests.zip' 
-    - publish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-automatedtests.zip'
-      displayName: 'Upload Test Package'
-      artifact: drop-automatedtests
+        archiveType: "zip"
+        archiveFile: '$(Build.BuildId)/selenium-tests.zip'
+        replaceExistingArchive: true
+    - upload: $(Build.BuildId)/selenium-tests.zip
+      artifact: selenium-tests
 
 - stage: Deploy
   jobs:
@@ -102,10 +103,81 @@ stages:
                   package: '$(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip'
                   deploymentMethod: 'auto'
 
+- stage: Test
+  jobs:
+  - job: Newman
+    steps:
+      - task: Bash@3
+        displayName: 'Run Newman Tests'
+        inputs:
+          targetType: 'inline'
+          script: |
+            sudo npm install -g newman reporter
+            newman --version
+            echo 'Newman installed'      
+      # - task: PublishTestResults@2
+      #   displayName: 'Publish Postman Newman Results **/newman-*.xml'
+      #   condition: always()
+      #   inputs:
+      #     testResultsFormat: 'JUnit'
+      #     testRunTitle: Data and Regression Tests
+      #     testResultsFiles: '**/newman-*.xml'
+
+  - job: Selenium
+    steps:
+    - task: Bash@3
+      displayName: 'Running Selenium Test'
+      inputs:
+        targetType: 'inline'
+        script: |
+          sudo apt-get update -y
+          sudo apt-get install python3-pip -y
+          sudo pip3 install -U selenium
+          sudo apt-get install unzip -y
+          sudo apt-get install -y chromium-browser
+          
+          wget https://chromedriver.storage.googleapis.com/113.0.5672.63/chromedriver_linux64.zip
+          unzip chromedriver_linux64.zip
+          sudo mv chromedriver /usr/bin/chromedriver
+          sudo chown root:root /usr/bin/chromedriver
+          sudo chmod +x /usr/bin/chromedriver
+          chromium-browser -version
+          chromedriver --version
+
+          echo 'Selenium installed' 
+
+  - job: JMeter
+    steps:
+    - task: Bash@3
+      displayName: Install JMeter
+      inputs:
+        targetType: 'inline'
+        script: |
+          sudo apt-get install openjdk-11-jre-headless -y
+          java -version
+          wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.6.tgz -O jmeter.tgz
+          tar xzvf jmeter.tgz
+          apache-jmeter-5.6/bin/jmeter --version
+
+          echo 'JMeter installed'
+
+    - task: Bash@3
+      displayName: JMeter Stress Test
+      inputs:
+        targetType: 'inline'
+        script: |
+          echo 'Running JMeter Stress Tests'
+    - task: Bash@3
+      displayName: JMeter Endurance Test
+      inputs:
+        targetType: 'inline'
+        script: |
+          echo 'Running JMeter Endurance Tests'
+
     # Destroy the resources in Azure
-  # - stage: Destroy TF resources
+  # - stage: Destroy
   #   jobs:
-  #   - job: Destroy
+  #   - job: DestroyInfrastructure
   #     steps:
   #     - task: TerraformCLI@0
   #       displayName: Terraform destroy
