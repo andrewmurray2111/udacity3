@@ -76,7 +76,7 @@ stages:
     - task: ArchiveFiles@2
       displayName: "Archive Selenium Tests"
       inputs:
-        rootFolderOrFile: "$(System.DefaultWorkingDirectory)/automatedtesting/selenium"
+        rootFolderOrFile: "automatedtesting/selenium"
         includeRootFolder: false
         archiveType: "zip"
         archiveFile: '$(Build.BuildId)/selenium-tests.zip'
@@ -103,9 +103,9 @@ stages:
                   package: '$(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip'
                   deploymentMethod: 'auto'
 
-- stage: InstallDependencies
+- stage: Dependencies
   jobs:
-  - job:
+  - job: Install Dependencies
     steps:
       - task: Bash@3
         displayName: Install dependencies
