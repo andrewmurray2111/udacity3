@@ -83,24 +83,24 @@ stages:
       displayName: 'Upload Test Package'
       artifact: drop-automatedtests
 
-  - stage: Deploy API to VM
-    jobs:
-      - deployment: FakeRestAPI
-        displayName: Deploy API to VM
-        environment:
-          name: 'TEST'
-          resourceType: VirtualMachine
-        strategy:
-          runOnce:
-            deploy:
-                steps:
-                - task: AzureWebApp@1
-                  inputs:
-                    azureSubscription: '$(azureServiceConnectionId)'
-                    appType: 'webAppLinux'
-                    appName: 'appService-AppService'
-                    package: '$(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip'
-                    deploymentMethod: 'auto'
+- stage: Deploy
+  jobs:
+    - deployment: FakeRestAPI
+      displayName: Deploy API to VM
+      environment:
+        name: 'TEST'
+        resourceType: VirtualMachine
+      strategy:
+        runOnce:
+          deploy:
+              steps:
+              - task: AzureWebApp@1
+                inputs:
+                  azureSubscription: '$(azureServiceConnectionId)'
+                  appType: 'webAppLinux'
+                  appName: 'appService-AppService'
+                  package: '$(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip'
+                  deploymentMethod: 'auto'
 
     # Destroy the resources in Azure
   # - stage: Destroy TF resources
