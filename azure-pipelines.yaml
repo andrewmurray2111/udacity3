@@ -71,7 +71,7 @@ stages:
         archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip'
     - publish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip'
       displayName: 'Upload Fakerrestapi package'
-      artifact: drop-fakerestapi
+      artifact: fakerestapi
 
     - task: ArchiveFiles@2
       displayName: "Archive Selenium Tests"
@@ -101,6 +101,8 @@ stages:
                   appType: 'webAppLinux'
                   appName: 'AppService-ajm'
                   package: '$(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip'
+                  deployToSlotOrASE: true
+                  resourceGroupName: 'udacity3_rg'
                   deploymentMethod: 'auto'
 
 - stage: Dependencies
