@@ -34,5 +34,11 @@ resource "azurerm_linux_virtual_machine" "test" {
     storage_account_type = "Standard_LRS"
   }
   
-  source_image_id       = data.azurerm_shared_image.test.id
+  #source_image_id       = data.azurerm_shared_image.test.id
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "18.04-LTS"
+    version   = "latest"
+  }
 }
