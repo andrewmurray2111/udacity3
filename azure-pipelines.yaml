@@ -178,6 +178,7 @@ stages:
           sudo python3 -u selenium-test.py 2>&1 | sudo tee -a /var/log/selenium/selenium-test.log
 
           cd $(System.DefaultWorkingDirectory)
+          pwd
           mkdir -p selenium-log
           sudo cp /var/log/selenium/selenium-test.log selenium-log/selenium-test.log
     - task: PublishPipelineArtifact@1
