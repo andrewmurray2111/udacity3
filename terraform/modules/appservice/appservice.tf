@@ -13,7 +13,7 @@ resource "azurerm_linux_web_app" "test" {
   service_plan_id     = azurerm_service_plan.test.id
 
   app_settings = {
-    "WEBSITE_RUN_FROM_PACKAGE" = 0
+    "WEBSITE_RUN_FROM_PACKAGE" = 1
   }
   site_config {
     always_on = false
