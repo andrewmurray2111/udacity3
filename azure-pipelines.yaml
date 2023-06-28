@@ -88,9 +88,9 @@ stages:
   jobs:
     - deployment: FakeRestAPI
       displayName: Deploy API to VM
-      environment:
-        name: 'TEST'
-        resourceType: VirtualMachine
+      #environment:
+      #  name: 'TEST'
+      #  resourceType: VirtualMachine
       strategy:
         runOnce:
           deploy:
