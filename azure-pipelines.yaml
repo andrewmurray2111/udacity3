@@ -99,7 +99,7 @@ stages:
                 inputs:
                   azureSubscription: '$(azureServiceConnectionId)'
                   appType: 'webAppLinux'
-                  appName: 'appService-AppService'
+                  appName: 'AppService-ajm'
                   package: '$(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip'
                   deploymentMethod: 'auto'
 
