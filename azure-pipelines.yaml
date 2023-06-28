@@ -100,7 +100,7 @@ stages:
                   azureSubscription: '$(azureServiceConnectionId)'
                   appType: 'webAppLinux'
                   appName: 'AppService-ajm'
-                  package: '$(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip'
+                  package: '$(Pipeline.Workspace)/fakerestapi/$(Build.BuildId)-fakerestapi.zip'
                   deployToSlotOrASE: true
                   resourceGroupName: 'udacity3_rg'
                   deploymentMethod: 'auto'
