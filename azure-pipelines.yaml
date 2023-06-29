@@ -134,26 +134,38 @@ stages:
   - job: Newman
     steps:
       - task: Bash@3
-        displayName: 'Run Newman Tests'
+        displayName: 'Install Newman'
         inputs:
           targetType: 'inline'
           script: |
             sudo npm install -g newman reporter
             newman --version
-            echo 'Newman installed'    
-
-      # - task: PublishTestResults@2
-      #   displayName: 'Publish Postman Newman Results **/newman-*.xml'
-      #   condition: always()
-      #   inputs:
-      #     testResultsFormat: 'JUnit'
-      #     testRunTitle: Data and Regression Tests
-      #     testResultsFiles: '**/newman-*.xml'
-      # - task: PublishPipelineArtifact@1
-      #   displayName: Publish Newman logs
-      #   inputs:
-      #     targetPath: '$(System.DefaultWorkingDirectory)/newman-log/newman-test.log'
-      #     artifactName: 'newman-logs-artifact'
+            mkdir -p newman-results
+            echo 'Newman installed'
+      - task: CmdLine@2
+        displayName: Run Regression Tests
+        inputs:
+          script: 'newman run automatedtesting/postman/Regression.postman_collection.json -e automatedtesting/postman/jsonplaceholder.postman_environment.json --bail newman -x --reporters cli,junit --reporter-junit-export newman-results/RegressionTestResults.xml --suppress-exit-code'
+          workingDirectory: '$(System.DefaultWorkingDirectory)'
+        continueOnError: true
+      - task: CmdLine@2
+        displayName: Run Validation Tests
+        inputs:
+          script: 'newman run automatedtesting/postman/Validation.postman_collection.json -e automatedtesting/postman/jsonplaceholder.postman_environment.json --bail newman -x --reporters cli,junit --reporter-junit-export newman-results/ValidationTestResults.xml --suppress-exit-code'
+          workingDirectory: '$(System.DefaultWorkingDirectory)'
+        continueOnError: true
+      - task: PublishTestResults@2
+        displayName: 'Publish Postman Newman Results **/newman-*.xml'
+        condition: always()
+        inputs:
+          testResultsFormat: 'JUnit'
+          testRunTitle: Data and Regression Tests
+          testResultsFiles: '**/newman-*.xml'
+      - task: PublishPipelineArtifact@1
+        displayName: Publish Newman logs
+        inputs:
+          targetPath: '$(System.DefaultWorkingDirectory)/newman-log/newman-test.log'
+          artifactName: 'newman-logs-artifact'
 
   - job: Selenium
     steps:
