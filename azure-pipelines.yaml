@@ -159,11 +159,6 @@ stages:
           testResultsFormat: 'JUnit'
           testRunTitle: Newman Tests
           testResultsFiles: '$(System.DefaultWorkingDirectory)/newman-results/*.xml'
-      - task: PublishPipelineArtifact@1
-        displayName: Publish Newman Results Artifact
-        inputs:
-          targetPath: '$(System.DefaultWorkingDirectory)/newman-results/*.xml'
-          artifactName: 'newman-results-artifact'
 
   - job: Selenium
     steps:
