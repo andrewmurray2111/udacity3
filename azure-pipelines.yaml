@@ -220,7 +220,7 @@ stages:
         targetType: 'inline'
         script: |
           echo 'Running JMeter Stress Tests'
-          apache-jmeter-5.4/bin/jmeter -n -t jmeter/Stress.jmx -l log/jmeter/stress.csv \
+          apache-jmeter-5.4/bin/jmeter -n -t automatedtesting/jmeter/Stress.jmx -l log/jmeter/stress.csv \
             -e -f -o log/jmeter/stress-report -j log/jmeter/jmeter.log
 
     - task: Bash@3
@@ -229,7 +229,7 @@ stages:
         targetType: 'inline'
         script: |
           echo 'Running JMeter Endurance Tests'
-          apache-jmeter-5.4/bin/jmeter -n -t jmeter/Endurance.jmx -l log/jmeter/endurance.csv \
+          apache-jmeter-5.4/bin/jmeter -n -t automatedtesting/jmeter/Endurance.jmx -l log/jmeter/endurance.csv \
             -e -f -o log/jmeter/endurance-report -j log/jmeter/endurance.log
 
     - task: PublishPipelineArtifact@1
