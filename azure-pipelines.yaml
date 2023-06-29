@@ -98,7 +98,7 @@ stages:
               - task: AzureWebApp@1
                 inputs:
                   azureSubscription: '$(azureServiceConnectionId)'
-                  appType: 'webAppLinux'
+                  appType: 'webApp'
                   appName: 'AppService-ajm'
                   package: '$(Pipeline.Workspace)/fakerestapi/$(Build.BuildId)-fakerestapi.zip'
                   deployToSlotOrASE: true
