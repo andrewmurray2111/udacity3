@@ -120,9 +120,7 @@ stages:
             sudo apt-get install openjdk-11-jre-headless -y
             java --version
 
-            wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-            source ~/.bashrc
-            nvm install --lts
+            sudo apt install npm
 
             wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh && sh onboard_agent.sh -w 4be6f1cd-03fb-48d4-9093-cb5b1cc02c44 -s lYbbzvto06zPiGNjTl+JXAV0S2U9nuycymUAggxiBmkrt40zbKXHIeWcMkgewjv0of2uVYYAX8TV9Xw1QMP1yQ== -d opinsights.azure.com
             sudo /opt/microsoft/omsagent/bin/service_control restart 4be6f1cd-03fb-48d4-9093-cb5b1cc02c44
@@ -155,17 +153,17 @@ stages:
           workingDirectory: '$(System.DefaultWorkingDirectory)'
         continueOnError: true
       - task: PublishTestResults@2
-        displayName: 'Publish Postman Newman Results **/newman-*.xml'
+        displayName: 'Publish Postman Newman in CI'
         condition: always()
         inputs:
           testResultsFormat: 'JUnit'
-          testRunTitle: Data and Regression Tests
-          testResultsFiles: '**/newman-*.xml'
+          testRunTitle: Newman Tests
+          testResultsFiles: '$(System.DefaultWorkingDirectory)/newman-results/*.xml'
       - task: PublishPipelineArtifact@1
-        displayName: Publish Newman logs
+        displayName: Publish Newman Results Artifact
         inputs:
-          targetPath: '$(System.DefaultWorkingDirectory)/newman-log/newman-test.log'
-          artifactName: 'newman-logs-artifact'
+          targetPath: '$(System.DefaultWorkingDirectory)/newman-results/*.xml'
+          artifactName: 'newman-results-artifact'
 
   - job: Selenium
     steps:
