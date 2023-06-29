@@ -17,12 +17,11 @@ resource "azurerm_windows_web_app" "test" {
     "SCM_DO_BUILD_DURING_DEPLOYMENT" = true
   }
 
-  application_stack = {
-    current_stack = "dotnet"
-    dotnet_version = "v6.0"
-  }
-
   site_config {
+    application_stack {
+      current_stack = "dotnet"
+      dotnet_version = "v6.0"
+    }
     always_on = false
   }
 }
