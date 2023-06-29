@@ -140,7 +140,8 @@ stages:
           script: |
             sudo npm install -g newman reporter
             newman --version
-            echo 'Newman installed'      
+            echo 'Newman installed'    
+
       # - task: PublishTestResults@2
       #   displayName: 'Publish Postman Newman Results **/newman-*.xml'
       #   condition: always()
@@ -148,6 +149,11 @@ stages:
       #     testResultsFormat: 'JUnit'
       #     testRunTitle: Data and Regression Tests
       #     testResultsFiles: '**/newman-*.xml'
+      # - task: PublishPipelineArtifact@1
+      #   displayName: Publish Newman logs
+      #   inputs:
+      #     targetPath: '$(System.DefaultWorkingDirectory)/newman-log/newman-test.log'
+      #     artifactName: 'newman-logs-artifact'
 
   - job: Selenium
     steps:
@@ -197,9 +203,14 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.6.tgz -O jmeter.tgz
+          wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.4.tgz -O jmeter.tgz
           tar xzvf jmeter.tgz
-          apache-jmeter-5.6/bin/jmeter --version
+          apache-jmeter-5.4/bin/jmeter --version
+
+          sudo mkdir -p /var/log/jmeter
+          sudo chmod -R 775 /var/log/jmeter
+
+          mkdir -p log/jmeter
 
           echo 'JMeter installed'
 
@@ -209,12 +220,23 @@ stages:
         targetType: 'inline'
         script: |
           echo 'Running JMeter Stress Tests'
+          apache-jmeter-5.4/bin/jmeter -n -t jmeter/Stress.jmx -l log/jmeter/stress.csv \
+            -e -f -o log/jmeter/stress-report -j log/jmeter/jmeter.log
+
     - task: Bash@3
       displayName: JMeter Endurance Test
       inputs:
         targetType: 'inline'
         script: |
           echo 'Running JMeter Endurance Tests'
+          apache-jmeter-5.4/bin/jmeter -n -t jmeter/Endurance.jmx -l log/jmeter/endurance.csv \
+            -e -f -o log/jmeter/endurance-report -j log/jmeter/endurance.log
+
+    - task: PublishPipelineArtifact@1
+      displayName: Publish JMeter Artifacts
+      inputs:
+        targetPath: '$(System.DefaultWorkingDirectory)/log/jmeter/'
+        artifactName: 'jmeter-logs-artifact'
 
     # Destroy the resources in Azure
   # - stage: Destroy
