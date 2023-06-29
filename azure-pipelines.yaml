@@ -230,7 +230,7 @@ stages:
         script: |
           echo 'Running JMeter Endurance Tests'
           apache-jmeter-5.4/bin/jmeter -n -t automatedtesting/jmeter/Endurance.jmx -l log/jmeter/endurance.csv \
-            -e -f -o log/jmeter/endurance-report -j log/jmeter/endurance.log
+            -e -f -o log/jmeter/endurance-report -j log/jmeter/jmeter.log
 
     - task: PublishPipelineArtifact@1
       displayName: Publish JMeter Artifacts
