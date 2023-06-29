@@ -1,23 +1,12 @@
 name: Azure Pipelines
 
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
 trigger:
 - main
 
-# ToDo: Replace the agent pool name, if you are using Udacity Cloud lab. 
-# Otherwise comment out the line below. 
 pool: myAgentPool
 
 variables:
-  python.version: '3.8.x'
-  # ToDo: Replace the service connection name as used in the DevOps project settings
   azureServiceConnectionId: 'uda3_sc'
-  # Project root folder. Point to the folder containing manage.py file.
-  projectRoot: $(System.DefaultWorkingDirectory)
-  # Environment name
-  environmentName: 'test'
 
 stages:
 - stage: Build
@@ -30,8 +19,7 @@ stages:
       inputs:
         terraformVersion: '1.1.2'
     
-    # Run Terraform Init on the pipeline agent 
-    # ToDo: Replace the resource group name, storage account name, and container name below
+    # Run Terraform Init on the pipeline agent
     - task: TerraformCLI@0
       displayName: 'Terrafom init'
       inputs:
@@ -53,7 +41,6 @@ stages:
 
     
     # Run Terraform Apply
-    # ToDo: Change the workingDirectory path, as applicable to you
     - task: TerraformCLI@0
       displayName: Terraform apply
       inputs:
@@ -62,6 +49,7 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
         environmentServiceNameAzureRM: '$(azureServiceConnectionId)'
 
+    # Archiving
     - task: ArchiveFiles@2
       displayName: 'Archive FakeRestAPI'
       inputs:
@@ -105,6 +93,7 @@ stages:
                   resourceGroupName: 'udacity3_rg'
                   deploymentMethod: 'auto'
 
+# Shared dependencies
 - stage: Dependencies
   jobs:
   - job: InstallDependencies
@@ -243,7 +232,7 @@ stages:
         targetPath: '$(System.DefaultWorkingDirectory)/log/jmeter/'
         artifactName: 'jmeter-logs-artifact'
 
-    # Destroy the resources in Azure
+  ## Destroy the resources in Azure
   # - stage: Destroy
   #   jobs:
   #   - job: DestroyInfrastructure
